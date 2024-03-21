@@ -1,6 +1,8 @@
 require("dotenv").config()
 const express = require("express")
 const cors = require("cors")
+const dbconn = require("./config/dbConnect")
+
 
 const app = express()
 
@@ -15,6 +17,8 @@ app.use(
     extended: true,
   })
 )
+
+dbconn()
 
 const PORT = process.env.PORT || 8000
 app.listen(PORT, () => console.log("server ready " + PORT))
