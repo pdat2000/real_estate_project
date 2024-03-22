@@ -1,10 +1,20 @@
 import { IoMailOpenOutline } from "react-icons/io5"
 import { BsTelephone } from "react-icons/bs"
-import { TfiFacebook, TfiInstagram, TfiYoutube } from "react-icons/tfi";
+import { TfiFacebook, TfiInstagram, TfiYoutube } from "react-icons/tfi"
+import { twMerge } from "tailwind-merge"
+import clsx from "clsx"
+import withRouter from "~/hocs/withRouter"
 
-const Topheader = () => {
+const Topheader = ({ location }) => {
   return (
-    <div className="h-[85px] bg-transparent fixed z-50 top-0 w-full px-[100px] py-[26px] flex items-center justify-between text-white border-b border-main-400">
+    <div
+      className={twMerge(
+        clsx(
+          "h-[85px] bg-transparent fixed z-50 top-0 w-full px-[100px] py-[26px] flex items-center justify-between text-white border-b border-main-400",
+          location.pathname !== "/" && "bg-main-700"
+        )
+      )}
+    >
       <span className="flex items-center gap-2">
         <IoMailOpenOutline />
         <span>
@@ -14,9 +24,9 @@ const Topheader = () => {
       </span>
       <div className="flex items-center gap-6">
         <div className="flex items-center gap-6 text-gray-300 text-xl">
-            <TfiFacebook/>
-            <TfiInstagram />
-            <TfiYoutube />
+          <TfiFacebook />
+          <TfiInstagram />
+          <TfiYoutube size={20} />
         </div>
         <div className="flex items-center pl-8 border-l border-main-400">
           <span className="flex items-center gap-2">
@@ -29,4 +39,4 @@ const Topheader = () => {
   )
 }
 
-export default Topheader
+export default withRouter(Topheader)

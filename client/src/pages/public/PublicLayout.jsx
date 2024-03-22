@@ -1,16 +1,18 @@
+import clsx from "clsx"
 import { Outlet } from "react-router-dom"
+import withRouter from "~/hocs/withRouter"
 import { Navigation, Topheader } from "~/components"
 
-const PublicLayout = () => {
+const PublicLayout = ({ location }) => {
   return (
     <main>
       <Topheader />
       <Navigation />
-      <div>
+      <div className={clsx(location.pathname === "/" ? "pt-0" : "pt-[232px]")}>
         <Outlet />
       </div>
     </main>
   )
 }
 
-export default PublicLayout
+export default withRouter(PublicLayout)
