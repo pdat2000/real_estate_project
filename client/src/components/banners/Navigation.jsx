@@ -30,7 +30,7 @@ const Navigation = ({ location }) => {
             to={el.path}
             className={({ isActive }) =>
               clsx(
-                isActive && "text-white font-medium",
+                isActive && "font-medium",
                 location.pathname === "/" ? "text-white" : "text-gray-900"
               )
             }
