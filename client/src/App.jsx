@@ -8,10 +8,14 @@ import {
   PublicLayout,
   Search,
 } from "./pages/public"
+import Modal from "~/components/commons/Modal"
+import { useAppStore } from "~/store/useAppStore"
 
 function App() {
+  const { isShowModal } = useAppStore()
   return (
-    <div>
+    <div className="relative">
+      {isShowModal && <Modal />}
       <Routes>
         <Route path={path.PUBLIC_LAYOUT} element={<PublicLayout />}>
           <Route path={path.HOME} element={<Home />} />
