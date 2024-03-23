@@ -4,7 +4,7 @@ export default {
   theme: {
     fontFamily: {
       agbalumo: ["Agbalumo"],
-      dance: ['Dancing Script']
+      dance: ["Dancing Script"],
     },
     extend: {
       backgroundColor: {
@@ -39,5 +39,5 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [require("@tailwindcss/forms")],
 }
