@@ -2,7 +2,7 @@ require("dotenv").config()
 const express = require("express")
 const cors = require("cors")
 const dbconn = require("./config/dbConnect")
-
+const initRoutes = require("./routes")
 
 const app = express()
 
@@ -17,8 +17,9 @@ app.use(
     extended: true,
   })
 )
-
 dbconn()
+
+initRoutes(app)
 
 const PORT = process.env.PORT || 8000
 app.listen(PORT, () => console.log("server ready " + PORT))

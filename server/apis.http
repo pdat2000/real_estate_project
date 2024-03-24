@@ -1,0 +1,5 @@
+### Register
+
+POST http://localhost:5000/api/auth/register?name=dat&phone=123124
+Content-Type: application/json
+
