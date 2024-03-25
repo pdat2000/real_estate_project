@@ -1,9 +1,8 @@
 const router = require("express").Router()
 const ctrls = require("../controllers/auth")
-const { stringReq, numberReq } = require("../middlewaves/joiSchema")
+const { stringReq } = require("../middlewaves/joiSchema")
 const Joi = require("joi")
 const validateDto = require("../middlewaves/validation")
-const { errHandler } = require("../middlewaves/errorHandler")
 
 router.post(
   "/register",
@@ -12,11 +11,21 @@ router.post(
       password: stringReq,
       name: stringReq,
       phone: stringReq,
-      role: numberReq,
+      role: stringReq,
     })
   ),
-  errHandler,
   ctrls.register
+)
+
+router.post(
+  "/signin",
+  validateDto(
+    Joi.object({
+      password: stringReq,
+      phone: stringReq,
+    })
+  ),
+  ctrls.signIn
 )
 
 module.exports = router
