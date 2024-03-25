@@ -10,11 +10,13 @@ import {
 } from "./pages/public"
 import Modal from "~/components/commons/Modal"
 import { useAppStore } from "~/store/useAppStore"
+import "react-toastify/dist/ReactToastify.css"
+import { ToastContainer } from "react-toastify"
 
 function App() {
   const { isShowModal } = useAppStore()
   return (
-    <div className="relative">
+    <div>
       {isShowModal && <Modal />}
       <Routes>
         <Route path={path.PUBLIC_LAYOUT} element={<PublicLayout />}>
@@ -25,6 +27,18 @@ function App() {
           <Route path={path.SEARCH} element={<Search />} />
         </Route>
       </Routes>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
     </div>
   )
 }

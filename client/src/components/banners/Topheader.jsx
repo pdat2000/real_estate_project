@@ -5,7 +5,7 @@ import { twMerge } from "tailwind-merge"
 import clsx from "clsx"
 import withRouter from "~/hocs/withRouter"
 
-const Topheader = ({ location }) => {
+const Topheader = withRouter(({ location }) => {
   return (
     <div
       className={twMerge(
@@ -37,6 +37,6 @@ const Topheader = ({ location }) => {
       </div>
     </div>
   )
-}
+})
 
-export default withRouter(Topheader)
+export default Topheader

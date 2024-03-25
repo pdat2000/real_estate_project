@@ -7,7 +7,7 @@ import { twMerge } from "tailwind-merge"
 import { useUserStore } from "~/store/useUserStore"
 import { useAppStore } from "~/store/useAppStore"
 
-const Navigation = ({ location }) => {
+const Navigation = withRouter(({ location }) => {
   const { token } = useUserStore()
   const { setModal } = useAppStore()
 
@@ -70,6 +70,6 @@ const Navigation = ({ location }) => {
       </div>
     </div>
   )
-}
+})
 
-export default withRouter(Navigation)
+export default Navigation
