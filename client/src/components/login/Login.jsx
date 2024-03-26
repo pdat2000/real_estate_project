@@ -6,11 +6,13 @@ import { apiRegister, apiSignIn } from "~/apis/auth"
 import Swal from "sweetalert2"
 import { toast } from "react-toastify"
 import { useAppStore } from "~/store/useAppStore"
+import { useUserStore } from "~/store/useUserStore"
 
 const Login = () => {
   const [variant, setVariant] = useState("LOGIN")
   const [isLoading, setIsLoading] = useState(false)
   const { setModal } = useAppStore()
+  const { setToken } = useUserStore()
 
   const {
     register,
@@ -39,6 +41,7 @@ const Login = () => {
     if (variant === "LOGIN") {
       setIsLoading(true)
       const response = await apiSignIn(data)
+      setToken(response.accessToken)
       setIsLoading(false)
       if (response.success) {
         toast.success(response.mes)

@@ -20,3 +20,9 @@ Content-Type: application/json
     "password": "123456",
     "phone": "0987654321"
 }
+
+###verify token
+GET http://localhost:5000/api/user/current
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJjNTYyMDYwOC00ODE4LTQ0MTktOWMxZi1jMGEzMGM3MWZjYWQiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTcxMTQ3NDcwNSwiZXhwIjoxNzEyMDc5NTA1fQ.Rf0O-A0HSCNKH9vbVtrUTfrdwNf7BF5sscayju4c6ro
+

@@ -12,9 +12,19 @@ import Modal from "~/components/commons/Modal"
 import { useAppStore } from "~/store/useAppStore"
 import "react-toastify/dist/ReactToastify.css"
 import { ToastContainer } from "react-toastify"
+import { useUserStore } from "~/store/useUserStore"
+import { useEffect } from "react"
 
 function App() {
   const { isShowModal } = useAppStore()
+  const { getCurrent, current, token } = useUserStore()
+
+  useEffect(() => {
+    getCurrent()
+  }, [token])
+
+  console.log("current", current)
+
   return (
     <div>
       {isShowModal && <Modal />}
