@@ -9,6 +9,7 @@ import { useAppStore } from "~/store/useAppStore"
 
 const Login = () => {
   const [variant, setVariant] = useState("LOGIN")
+  const [isLoading, setIsLoading] = useState(false)
   const { setModal } = useAppStore()
 
   const {
@@ -19,7 +20,9 @@ const Login = () => {
   } = useForm()
   const onSubmit = async (data) => {
     if (variant === "REGISTER") {
+      setIsLoading(true)
       const response = await apiRegister(data)
+      setIsLoading(false)
       if (response.success) {
         Swal.fire({
           icon: "success",
@@ -34,15 +37,15 @@ const Login = () => {
     }
 
     if (variant === "LOGIN") {
-      const { name, role, ...payload } = data
+      setIsLoading(true)
       const response = await apiSignIn(data)
+      setIsLoading(false)
       if (response.success) {
         toast.success(response.mes)
         setModal(false, null)
       } else toast.error(response.mes)
     }
   }
-
   useEffect(() => {
     reset()
   }, [variant])
@@ -133,7 +136,11 @@ const Login = () => {
           />
         )}
 
-        <Button className="py-2 my-6" handleOnClick={handleSubmit(onSubmit)}>
+        <Button
+          className="py-2 my-6"
+          handleOnClick={handleSubmit(onSubmit)}
+          disabled={isLoading}
+        >
           {variant === "LOGIN" ? "Sign in" : "Register"}
         </Button>
         <span className="cursor-pointer text-main-500 hover:underline w-full text-center">
@@ -144,4 +151,4 @@ const Login = () => {
   )
 }
 
-export default (Login)
+export default Login
