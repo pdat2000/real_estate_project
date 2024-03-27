@@ -17,13 +17,11 @@ import { useEffect } from "react"
 
 function App() {
   const { isShowModal } = useAppStore()
-  const { getCurrent, current, token } = useUserStore()
+  const { getCurrent, token } = useUserStore()
 
   useEffect(() => {
     getCurrent()
   }, [token])
-
-  console.log("current", current)
 
   return (
     <div>
