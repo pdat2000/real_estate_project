@@ -2,7 +2,6 @@ const asyncHandler = require("express-async-handler")
 const db = require("../models")
 
 const getCurrent = asyncHandler(async (req, res) => {
-  const { uid } = req.user
   const response = await db.User.findByPk(uid, {
     attributes: { exclude: ["password"] },
   })

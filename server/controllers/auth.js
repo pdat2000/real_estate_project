@@ -38,7 +38,7 @@ const signIn = asyncHandler(async (req, res, next) => {
     return throwErrorWithStatus(401, `Password is wrong.`, res, next)
 
   const token = jwt.sign(
-    { uid: user.id, role: user.role },
+    { uid: user.id, role: user.roleCode },
     process.env.JWT_SECRET,
     { expiresIn: "7d" }
   )
