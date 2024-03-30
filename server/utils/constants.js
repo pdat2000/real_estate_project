@@ -1,4 +1,4 @@
-module.exports = [
+module.exports.roles = [
   {
     code: "ROL1",
     value: "Quản trị viên",
@@ -13,6 +13,6 @@ module.exports = [
   },
   {
     code: "ROL7",
-    value: "Người khác hàng",
+    value: "Người khách hàng",
   },
 ]

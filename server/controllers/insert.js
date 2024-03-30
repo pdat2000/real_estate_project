@@ -1,6 +1,6 @@
 const asyncHandler = require("express-async-handler")
 const db = require("../models")
-const roles  = require("../utils/constants")
+const { roles } = require("../utils/constants")
 
 const initRoles = asyncHandler(async (req, res) => {
   const response = await db.Role.bulkCreate(roles)

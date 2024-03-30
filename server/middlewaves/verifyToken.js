@@ -14,22 +14,22 @@ const verifyToken = (req, res, next) => {
 }
 
 const isAgent = (req, res, next) => {
-  const { roleCode } = req.user
-  if (roleCode === "ROL7")
+  const { role } = req.user
+  if (role !== "ROL1" || role !== "ROL5" || role !== "ROL3")
     return throwErrorWithStatus(401, "Bạn không có quyền truy cập", res, next)
   next()
 }
 
 const isOwner = (req, res, next) => {
-  const { roleCode } = req.user
-  if (roleCode === "ROL7" || roleCode === "ROL5")
+  const { role } = req.user
+  if (role !== "ROL1" || role !== "ROL3")
     return throwErrorWithStatus(401, "Bạn không có quyền truy cập", res, next)
   next()
 }
 
 const isAdmin = (req, res, next) => {
-  const { roleCode } = req.user
-  if (roleCode !== "ROL1")
+  const { role } = req.user
+  if (role !== "ROL1")
     return throwErrorWithStatus(401, "Bạn không có quyền truy cập", res, next)
   next()
 }
