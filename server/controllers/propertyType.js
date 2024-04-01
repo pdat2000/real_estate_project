@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler")
 const db = require("../models")
 const { Sequelize, or } = require("sequelize")
 const { throwErrorWithStatus } = require("../middlewaves/errorHandler")
+const redis = require("../config/redis.config")
 
 const createPropertyType = asyncHandler(async (req, res) => {
   const { name } = req.body
@@ -45,16 +46,23 @@ const getPropertyType = asyncHandler(async (req, res) => {
           ? [el.replace("-", ""), "DESC"]
           : [el.replace("-", ""), "ASC"]
       )
-    console.log("sort", sort)
-    console.log("order", order)
     options.order = order
   }
 
   if (!limit) {
+    const alreadyGetAll = await redis.get("get-property-type")
+    if (alreadyGetAll)
+      return res.json({
+        success: true,
+        mes: "Got",
+        propertyType: JSON.parse(alreadyGetAll),
+      })
+
     const response = await db.PropertyType.findAll({
       where: query,
       ...options,
     })
+    redis.set("get-property-type", JSON.stringify(response))
     return res.json({
       success: response.length > 0,
       mes: response.length > 0 ? "Got" : "Cannot get propertyTypes",
