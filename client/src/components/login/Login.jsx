@@ -121,7 +121,7 @@ const Login = () => {
         {variant === "REGISTER" && (
           <InputRadio
             register={register}
-            id="role"
+            id="roleCode"
             label="Type account"
             inputClassname="rounded-md"
             validate={{ required: "This field cannot empty" }}
@@ -129,11 +129,11 @@ const Login = () => {
             options={[
               {
                 label: "User",
-                value: "USER",
+                value: "ROL1",
               },
               {
                 label: "Agent",
-                value: "AGENT",
+                value: "ROL2",
               },
             ]}
           />

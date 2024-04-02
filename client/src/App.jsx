@@ -14,6 +14,10 @@ import "react-toastify/dist/ReactToastify.css"
 import { ToastContainer } from "react-toastify"
 import { useUserStore } from "~/store/useUserStore"
 import { useEffect } from "react"
+import { AdminLayout } from "~/pages/admin"
+import { Dashboard } from "~/pages/admin"
+import { CreatePropertyType } from "~/pages/admin"
+import { ManagePropertyType } from "~/pages/admin"
 
 function App() {
   const { isShowModal } = useAppStore()
@@ -34,7 +38,21 @@ function App() {
           <Route path={path.PROPERTIES} element={<Properties />} />
           <Route path={path.SEARCH} element={<Search />} />
         </Route>
+
+        {/* admin routes*/}
+        <Route path={path.ADMIN_LAYOUT} element={<AdminLayout />}>
+          <Route path={path.DASHBOARD} element={<Dashboard />} />
+          <Route
+            path={path.CREATE_PROPERTY_TYPE}
+            element={<CreatePropertyType />}
+          />
+          <Route
+            path={path.MANAGE_PROPERTY_TYPE}
+            element={<ManagePropertyType />}
+          />
+        </Route>
       </Routes>
+
       <ToastContainer
         position="top-right"
         autoClose={5000}
