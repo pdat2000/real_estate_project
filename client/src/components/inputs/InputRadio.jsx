@@ -12,6 +12,7 @@ const InputRadio = ({
   placeholder,
   options,
   label,
+  optionsClassname,
 }) => {
   return (
     <div
@@ -24,24 +25,26 @@ const InputRadio = ({
           {label}
         </label>
       )}
-      {options.map((el) => (
-        <div className="flex items-center gap-4" key={el.value}>
-          <input
-            type="radio"
-            name={id}
-            id={el.value}
-            className={twMerge(
-              clsx(style, "placeholder:text-sm", inputClassname)
-            )}
-            {...register(id, validate)}
-            placeholder={placeholder}
-            value={el.value}
-          />
-          <label className="cursor-pointer" htmlFor={el.value}>
-            {el.label}
-          </label>
-        </div>
-      ))}
+      <div className={twMerge(clsx(optionsClassname))}>
+        {options.map((el) => (
+          <div className="flex items-center gap-4" key={el.value}>
+            <input
+              type="radio"
+              name={id}
+              id={el.value}
+              className={twMerge(
+                clsx(style, "placeholder:text-sm", inputClassname)
+              )}
+              {...register(id, validate)}
+              placeholder={placeholder}
+              value={el.value}
+            />
+            <label className="cursor-pointer" htmlFor={el.value}>
+              {el.label}
+            </label>
+          </div>
+        ))}
+      </div>
 
       {errors[id] && (
         <small className="text-red-500">{errors[id]?.message}</small>

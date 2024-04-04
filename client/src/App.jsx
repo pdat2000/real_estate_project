@@ -21,10 +21,11 @@ import { ManagePropertyType } from "~/pages/admin"
 
 function App() {
   const { isShowModal } = useAppStore()
-  const { getCurrent, token } = useUserStore()
+  const { getCurrent, token, getRoles } = useUserStore()
 
   useEffect(() => {
     getCurrent()
+    getRoles()
   }, [token])
 
   return (

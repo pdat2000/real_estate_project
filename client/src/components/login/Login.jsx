@@ -12,7 +12,7 @@ const Login = () => {
   const [variant, setVariant] = useState("LOGIN")
   const [isLoading, setIsLoading] = useState(false)
   const { setModal } = useAppStore()
-  const { setToken } = useUserStore()
+  const { setToken, roles } = useUserStore()
 
   const {
     register,
@@ -51,7 +51,7 @@ const Login = () => {
   }
   useEffect(() => {
     reset()
-  }, [variant])
+  }, [reset, variant])
 
   return (
     <div
@@ -126,16 +126,10 @@ const Login = () => {
             inputClassname="rounded-md"
             validate={{ required: "This field cannot empty" }}
             errors={errors}
-            options={[
-              {
-                label: "User",
-                value: "ROL1",
-              },
-              {
-                label: "Agent",
-                value: "ROL2",
-              },
-            ]}
+            optionsClassname="grid grid-cols-3 gap-4"
+            options={roles
+              .filter((el) => el.code !== "ROL1")
+              .map((el) => ({ label: el.value, value: el.code }))}
           />
         )}
 
