@@ -34,9 +34,9 @@ const InputFile = ({
         <span className="text-3xl text-gray-300">
           <FiUpload />
         </span>
-        <smal className="text-gray-300 italic">
+        <small className="text-gray-300 italic">
           Only support image with extension JPEG, PNG, JPG.
-        </smal>
+        </small>
       </label>
       {errors[id] && (
         <small className="text-red-500">{errors[id]?.message}</small>
