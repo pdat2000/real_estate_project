@@ -6,54 +6,62 @@ import { useForm } from 'react-hook-form'
 import { apiUploadImage } from '~/apis/beyond'
 import { FaSpinner } from 'react-icons/fa6'
 import { AiOutlineClose } from 'react-icons/ai'
+import { toast } from 'react-toastify'
 
 const InputFile = ({
   containerClassname,
   label,
   id,
   validate,
-  multiple = true,
+  multiple = false,
   getImages,
+  errors,
 }) => {
-  const {
-    register,
-    formState: { errors },
-    watch,
-  } = useForm()
-
+  const { register, watch } = useForm()
   const rawImages = watch(id)
   const [images, setImages] = useState([])
   const [isLoading, setIsLoading] = useState(false)
+
   const handleUpload = async (files) => {
     const formData = new FormData()
-    const imageLink = []
     setIsLoading(false)
+    const uploadPromises = []
     for (let file of files) {
       formData.append('file', file)
       formData.append(
         'upload_preset',
         import.meta.env.VITE_CLOUDYNARY_UPLOAD_PRESETS
       )
-      const response = await apiUploadImage(formData)
-      if (response.status === 200)
-        imageLink.push({
-          id: response.data.public_id,
-          path: response.data.secure_url,
-        })
+      uploadPromises.push(apiUploadImage(formData))
     }
-    setIsLoading(true)
-    setImages(imageLink)
-    setIsLoading(false)
+    const response = await Promise.all(uploadPromises)
+    if (response && response.length > 0) {
+      const tempArrImage = []
+      for (let result of response) {
+        if (result.status === 200)
+          tempArrImage.push({
+            id: result.data.public_id,
+            path: result.data.secure_url,
+          })
+      }
+      setIsLoading(true)
+      setImages(tempArrImage)
+      setIsLoading(false)
+    } else toast.error('Something went wrong')
   }
+  const handleDeleteImage = (e, imageId) => {
+    e.preventDefault()
+    setImages((prev) => prev.filter((item) => item.id !== imageId))
+  }
+
   useEffect(() => {
     if (rawImages && rawImages instanceof FileList && rawImages.length > 0) {
       handleUpload(rawImages)
     }
   }, [rawImages])
-
   useEffect(() => {
-    if (images && images.length > 0) getImages(images)
-  }, [getImages, images])
+    getImages(images)
+  }, [images])
 
   return (
     <div
@@ -86,12 +94,7 @@ const InputFile = ({
             {images?.map((el, index) => (
               <div key={index} className="col-span-1 relative">
                 <span
-                  onClick={(e) => {
-                    e.preventDefault()
-                    setImages((prev) =>
-                      prev.filter((item) => item.id !== el.id)
-                    )
-                  }}
+                  onClick={(e) => handleDeleteImage(e, el.id)}
                   className="w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center cursor-pointer absolute top-1 right-1"
                 >
                   <AiOutlineClose />
