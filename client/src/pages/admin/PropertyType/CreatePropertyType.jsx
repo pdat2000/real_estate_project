@@ -3,6 +3,7 @@ import { AiFillPlusCircle } from 'react-icons/ai'
 import { useForm } from 'react-hook-form'
 import { apiCreateNewPropertyType } from '~/apis/propertyType'
 import { toast } from 'react-toastify'
+import { useState } from 'react'
 
 const CreatePropertyType = () => {
   const {
@@ -14,6 +15,7 @@ const CreatePropertyType = () => {
     setError,
     clearErrors,
   } = useForm()
+  const [resetImage, setResetImage] = useState(false)
 
   const handlePropertyType = async (data) => {
     if (!data.images || data.images.length === 0) {
@@ -29,6 +31,7 @@ const CreatePropertyType = () => {
       })
       if (response.success) {
         toast.success(response.mes)
+        setResetImage((prev) => !prev)
         reset()
       } else toast.error(response.mes)
     }
@@ -39,6 +42,7 @@ const CreatePropertyType = () => {
       'images',
       images?.map((el) => el.path)
     )
+    if (images && images.length === 0) setResetImage(false)
   }
 
   return (
@@ -71,6 +75,7 @@ const CreatePropertyType = () => {
           validate={{ required: 'This field cannot empty' }}
           getImages={getImages}
           errors={errors}
+          resetImage={resetImage}
         />
       </form>
     </div>

@@ -16,6 +16,7 @@ const InputFile = ({
   multiple = false,
   getImages,
   errors,
+  resetImage,
 }) => {
   const { register, watch } = useForm()
   const rawImages = watch(id)
@@ -62,6 +63,12 @@ const InputFile = ({
   useEffect(() => {
     getImages(images)
   }, [images])
+  useEffect(() => {
+    if (resetImage && images && images.length > 0) {
+      getImages([])
+      setImages([])
+    }
+  }, [resetImage])
 
   return (
     <div
