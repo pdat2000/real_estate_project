@@ -3,7 +3,7 @@ import { AiFillPlusCircle } from 'react-icons/ai'
 import { useForm } from 'react-hook-form'
 import { apiCreateNewPropertyType } from '~/apis/propertyType'
 import { toast } from 'react-toastify'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 
 const CreatePropertyType = () => {
   const {
@@ -36,15 +36,18 @@ const CreatePropertyType = () => {
       } else toast.error(response.mes)
     }
   }
-  const getImages = (images) => {
-    if (images && images.length > 0) clearErrors('images')
-    setValue(
-      'images',
-      images?.map((el) => el.path)
-    )
-    if (images && images.length === 0) setResetImage(false)
-  }
-
+  const getImages = useCallback(
+    (images) => {
+      if (images && images.length > 0) clearErrors('images')
+      setValue(
+        'images',
+        images?.map((el) => el.path)
+      )
+      if (images && images.length === 0) setResetImage(false)
+    },
+    [clearErrors, setValue]
+  )
+  
   return (
     <div>
       <Title title="Create new property type">
