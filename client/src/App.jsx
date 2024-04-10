@@ -22,7 +22,6 @@ import { ManagePropertyType } from "~/pages/admin"
 function App() {
   const { isShowModal } = useAppStore()
   const { getCurrent, token, getRoles } = useUserStore()
-
   useEffect(() => {
     getCurrent()
     getRoles()

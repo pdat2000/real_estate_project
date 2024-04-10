@@ -1,9 +1,10 @@
-import clsx from "clsx"
-import { Fragment, useState } from "react"
-import { NavLink } from "react-router-dom"
-import { adminSibar } from "~/utils/constants"
-import { AiOutlineCaretRight } from "react-icons/ai"
-import { AiFillCaretDown } from "react-icons/ai"
+import clsx from 'clsx'
+import { Fragment, useState } from 'react'
+import { Link, NavLink } from 'react-router-dom'
+import { adminSibar } from '~/utils/constants'
+import { AiOutlineCaretRight } from 'react-icons/ai'
+import { AiFillCaretDown } from 'react-icons/ai'
+import { ImForward } from 'react-icons/im'
 
 const AdminSidebar = () => {
   const [activeTabs, setActiveTabs] = useState([])
@@ -22,12 +23,12 @@ const AdminSidebar = () => {
       <div className="mt-6">
         {adminSibar.map((el) => (
           <Fragment key={el.id}>
-            {el.type === "SINGLE" && (
+            {el.type === 'SINGLE' && (
               <NavLink
                 className={({ isActive }) =>
                   clsx(
-                    "flex items-center gap-2 px-4 py-3 hover:bg-main-700 hover:border-r-4 border-orange-700",
-                    isActive && "bg-main-700 border-r-4"
+                    'flex items-center gap-2 px-4 py-3 hover:bg-main-700 hover:border-r-4 border-orange-700',
+                    isActive && 'bg-main-700 border-r-4'
                   )
                 }
                 to={el.path}
@@ -36,7 +37,7 @@ const AdminSidebar = () => {
                 <span>{el.name}</span>
               </NavLink>
             )}
-            {el.type === "PARENT" && (
+            {el.type === 'PARENT' && (
               <>
                 <div
                   onClick={() => handleActivateTabs(el.id)}
@@ -61,8 +62,8 @@ const AdminSidebar = () => {
                         key={sub.id}
                         className={({ isActive }) =>
                           clsx(
-                            "flex items-center gap-2 px-4 py-3 hover:bg-main-700 hover:border-r-4 border-orange-700",
-                            isActive && "bg-main-700 border-r-4"
+                            'flex items-center gap-2 px-4 py-3 hover:bg-main-700 hover:border-r-4 border-orange-700',
+                            isActive && 'bg-main-700 border-r-4'
                           )
                         }
                         to={sub.path}
@@ -74,6 +75,17 @@ const AdminSidebar = () => {
                 )}
               </>
             )}
+            <Link
+              className={clsx(
+                'flex items-center gap-2 px-4 py-3 hover:bg-main-700 hover:border-r-4 border-orange-700'
+              )}
+              to="/"
+            >
+              <span className="text-2xl">
+                <ImForward />
+              </span>
+              <span>Go homepage</span>
+            </Link>
           </Fragment>
         ))}
       </div>

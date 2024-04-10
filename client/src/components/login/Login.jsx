@@ -1,44 +1,78 @@
-import { useEffect, useState } from "react"
-import clsx from "clsx"
-import { useForm } from "react-hook-form"
-import { Button, InputForm, InputRadio } from ".."
-import { apiRegister, apiSignIn } from "~/apis/auth"
-import Swal from "sweetalert2"
-import { toast } from "react-toastify"
-import { useAppStore } from "~/store/useAppStore"
-import { useUserStore } from "~/store/useUserStore"
+import { useEffect, useState } from 'react'
+import clsx from 'clsx'
+import { useForm } from 'react-hook-form'
+import { Button, InputForm, InputRadio } from '..'
+import { apiRegister, apiSignIn } from '~/apis/auth'
+import Swal from 'sweetalert2'
+import { toast } from 'react-toastify'
+import { useAppStore } from '~/store/useAppStore'
+import { useUserStore } from '~/store/useUserStore'
+import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth'
+import auth from '~/utils/firebaseConfig'
 
 const Login = () => {
-  const [variant, setVariant] = useState("LOGIN")
+  const [variant, setVariant] = useState('LOGIN')
   const [isLoading, setIsLoading] = useState(false)
   const { setModal } = useAppStore()
   const { setToken, roles } = useUserStore()
-
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
   } = useForm()
-  const onSubmit = async (data) => {
-    if (variant === "REGISTER") {
-      setIsLoading(true)
-      const response = await apiRegister(data)
-      setIsLoading(false)
-      if (response.success) {
-        Swal.fire({
-          icon: "success",
-          title: "Congrats",
-          text: response.mes,
-          showConfirmButton: true,
-          confirmButtonText: "Go sign in",
-        }).then(({ isConfirmed }) => {
-          if (isConfirmed) setVariant("LOGIN")
-        })
-      } else toast.error(response.mes)
-    }
 
-    if (variant === "LOGIN") {
+  const handleCaptchaVerify = () => {
+    if (!window.recaptchVerify) {
+      window.recaptchVerify = new RecaptchaVerifier(
+        auth,
+        'recaptcha-verifiler',
+        {
+          size: 'invisible',
+          callback: (response) => {
+            console.log('response', response)
+          },
+          'expired-callback': (response) => {
+            console.log('response-callback', response)
+          },
+        }
+      )
+    }
+  }
+  const handleSendOTP = (phone) => {
+    handleCaptchaVerify()
+    const verifier = window.recaptchVerify
+    const formatPhone = '+84' + phone.slice(1)
+    signInWithPhoneNumber(auth, formatPhone, verifier)
+      .then((result) => {
+        toast.success('send OTP to your phone')
+      })
+      .catch((error) => {
+        toast.error('something went wrong')
+      })
+  }
+  const onSubmit = async (data) => {
+    if (variant === 'REGISTER') {
+      if (data?.roleCode !== 'ROL7') {
+        handleSendOTP(data.phone)
+      }
+
+      // setIsLoading(true)
+      // const response = await apiRegister(data)
+      // setIsLoading(false)
+      // if (response.success) {
+      //   Swal.fire({
+      //     icon: 'success',
+      //     title: 'Congrats',
+      //     text: response.mes,
+      //     showConfirmButton: true,
+      //     confirmButtonText: 'Go sign in',
+      //   }).then(({ isConfirmed }) => {
+      //     if (isConfirmed) setVariant('LOGIN')
+      //   })
+      // } else toast.error(response.mes)
+    }
+    if (variant === 'LOGIN') {
       setIsLoading(true)
       const response = await apiSignIn(data)
       setToken(response.accessToken)
@@ -49,6 +83,7 @@ const Login = () => {
       } else toast.error(response.mes)
     }
   }
+
   useEffect(() => {
     reset()
   }, [reset, variant])
@@ -64,19 +99,20 @@ const Login = () => {
       <div className="flex justify-start gap-6 border-b-4 w-full">
         <span
           className={clsx(
-            variant === "LOGIN" && "border-b-2 border-black ",
-            "cursor-pointer"
+            variant === 'LOGIN' && 'border-b-2 border-black ',
+            'cursor-pointer'
           )}
-          onClick={() => setVariant("LOGIN")}
+          onClick={() => setVariant('LOGIN')}
         >
           Login
         </span>
+        <div id="recaptcha-verifiler"></div>
         <span
           className={clsx(
-            variant === "REGISTER" && "border-b-2 border-black",
-            "cursor-pointer"
+            variant === 'REGISTER' && 'border-b-2 border-black',
+            'cursor-pointer'
           )}
-          onClick={() => setVariant("REGISTER")}
+          onClick={() => setVariant('REGISTER')}
         >
           New account
         </span>
@@ -89,10 +125,10 @@ const Login = () => {
           inputClassname="rounded-md"
           placeholder="type your phonenumber here"
           validate={{
-            required: "This field cannot empty",
+            required: 'This field cannot empty',
             pattern: {
               value: /(84|0[3|5|7|8|9])+([0-9]{8})\b/,
-              message: "Phone number invalid",
+              message: 'Phone number invalid',
             },
           }}
           errors={errors}
@@ -104,41 +140,40 @@ const Login = () => {
           inputClassname="rounded-md"
           placeholder="type your password here"
           type="password"
-          validate={{ required: "This field cannot empty" }}
+          validate={{ required: 'This field cannot empty' }}
           errors={errors}
         />
-        {variant === "REGISTER" && (
+        {variant === 'REGISTER' && (
           <InputForm
             register={register}
             id="name"
             label="Your fullname"
             inputClassname="rounded-md"
             placeholder="type your fullname here"
-            validate={{ required: "This field cannot empty" }}
+            validate={{ required: 'This field cannot empty' }}
             errors={errors}
           />
         )}
-        {variant === "REGISTER" && (
+        {variant === 'REGISTER' && (
           <InputRadio
             register={register}
             id="roleCode"
             label="Type account"
             inputClassname="rounded-md"
-            validate={{ required: "This field cannot empty" }}
+            validate={{ required: 'This field cannot empty' }}
             errors={errors}
             optionsClassname="grid grid-cols-3 gap-4"
             options={roles
-              .filter((el) => el.code !== "ROL1")
+              .filter((el) => el.code !== 'ROL1')
               .map((el) => ({ label: el.value, value: el.code }))}
           />
         )}
-
         <Button
           className="py-2 my-6"
           handleOnClick={handleSubmit(onSubmit)}
           disabled={isLoading}
         >
-          {variant === "LOGIN" ? "Sign in" : "Register"}
+          {variant === 'LOGIN' ? 'Sign in' : 'Register'}
         </Button>
         <span className="cursor-pointer text-main-500 hover:underline w-full text-center">
           Forgot your password ?

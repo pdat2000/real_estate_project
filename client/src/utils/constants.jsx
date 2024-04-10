@@ -1,5 +1,6 @@
 import path from "./path"
 import { FaHouseChimney } from "react-icons/fa6";
+import { ImMenu } from "react-icons/im";
 
 export const navigations = [
   {
@@ -40,7 +41,7 @@ export const adminSibar = [
   {
     id: 132,
     name: "Property Type",
-    icon: "",
+    icon: <ImMenu />,
     type: "PARENT",
     subs: [
       {
