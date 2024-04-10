@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import clsx from 'clsx'
 import { useForm } from 'react-hook-form'
-import { Button, InputForm, InputRadio } from '..'
+import { Button, InputForm, InputRadio, OtpVerifier } from '..'
 import { apiRegister, apiSignIn } from '~/apis/auth'
 import Swal from 'sweetalert2'
 import { toast } from 'react-toastify'
@@ -9,12 +9,14 @@ import { useAppStore } from '~/store/useAppStore'
 import { useUserStore } from '~/store/useUserStore'
 import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth'
 import auth from '~/utils/firebaseConfig'
+import { twMerge } from 'tailwind-merge'
 
 const Login = () => {
   const [variant, setVariant] = useState('LOGIN')
   const [isLoading, setIsLoading] = useState(false)
   const { setModal } = useAppStore()
   const { setToken, roles } = useUserStore()
+  const [isShowComfirmOTP, setIsShowComfirmOTP] = useState(false)
   const {
     register,
     handleSubmit,
@@ -29,25 +31,27 @@ const Login = () => {
         'recaptcha-verifiler',
         {
           size: 'invisible',
-          callback: (response) => {
-            console.log('response', response)
-          },
-          'expired-callback': (response) => {
-            console.log('response-callback', response)
-          },
+          callback: (response) => {},
+          'expired-callback': (response) => {},
         }
       )
     }
   }
   const handleSendOTP = (phone) => {
+    setIsLoading(true)
     handleCaptchaVerify()
     const verifier = window.recaptchVerify
     const formatPhone = '+84' + phone.slice(1)
     signInWithPhoneNumber(auth, formatPhone, verifier)
       .then((result) => {
+        setIsLoading(false)
         toast.success('send OTP to your phone')
+        window.confirmationResult = result
+        setIsShowComfirmOTP(true)
       })
       .catch((error) => {
+        setIsLoading(false)
+        window.confirmOTP = null
         toast.error('something went wrong')
       })
   }
@@ -56,21 +60,6 @@ const Login = () => {
       if (data?.roleCode !== 'ROL7') {
         handleSendOTP(data.phone)
       }
-
-      // setIsLoading(true)
-      // const response = await apiRegister(data)
-      // setIsLoading(false)
-      // if (response.success) {
-      //   Swal.fire({
-      //     icon: 'success',
-      //     title: 'Congrats',
-      //     text: response.mes,
-      //     showConfirmButton: true,
-      //     confirmButtonText: 'Go sign in',
-      //   }).then(({ isConfirmed }) => {
-      //     if (isConfirmed) setVariant('LOGIN')
-      //   })
-      // } else toast.error(response.mes)
     }
     if (variant === 'LOGIN') {
       setIsLoading(true)
@@ -83,6 +72,23 @@ const Login = () => {
       } else toast.error(response.mes)
     }
   }
+  const handleRegister = async (data) => {
+    const response = await apiRegister(data)
+    if (response.success) {
+      Swal.fire({
+        icon: 'success',
+        title: 'Congrats',
+        text: response.mes,
+        showConfirmButton: true,
+        confirmButtonText: 'Go sign in',
+      }).then(({ isConfirmed }) => {
+        if (isConfirmed) {
+          setVariant('LOGIN')
+          setIsShowComfirmOTP(false)
+        }
+      })
+    } else toast.error(response.mes)
+  }
 
   useEffect(() => {
     reset()
@@ -90,13 +96,30 @@ const Login = () => {
 
   return (
     <div
-      className="bg-white rounded-md px-6 py-8 flex flex-col gap-6 text-lg"
+      className={twMerge(
+        clsx(
+          'bg-white rounded-md px-6 py-8 w-[600px] flex flex-col gap-6 text-lg relative',
+          isShowComfirmOTP && 'w-[600px] h-[270px]'
+        )
+      )}
       onClick={(e) => e.stopPropagation()}
     >
+      {isShowComfirmOTP && (
+        <div className="absolute inset-0 bg-white rounded-md">
+          <OtpVerifier cb={handleSubmit(handleRegister)} />
+        </div>
+      )}
       <h1 className="text-5xl font-semibold tracking-tight font-dance">
         Welcome to rest06
       </h1>
-      <div className="flex justify-start gap-6 border-b-4 w-full">
+      <div
+        className={twMerge(
+          clsx(
+            'flex justify-start gap-6 border-b-4 w-full',
+            isShowComfirmOTP && 'hidden'
+          )
+        )}
+      >
         <span
           className={clsx(
             variant === 'LOGIN' && 'border-b-2 border-black ',
@@ -117,7 +140,11 @@ const Login = () => {
           New account
         </span>
       </div>
-      <form className="flex flex-col gap-4 w-full px-4">
+      <form
+        className={twMerge(
+          clsx('flex flex-col gap-4 w-full px-4', isShowComfirmOTP && 'hidden')
+        )}
+      >
         <InputForm
           register={register}
           id="phone"

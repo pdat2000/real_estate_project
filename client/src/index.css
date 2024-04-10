@@ -1,5 +1,5 @@
-@import url("https://fonts.googleapis.com/css2?family=Agbalumo&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Agbalumo&family=Dancing+Script:wght@400..700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Agbalumo&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Agbalumo&family=Dancing+Script:wght@400..700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -11,4 +11,8 @@ html {
 
 body {
   height: 100%;
+}
+
+.otp-item {
+  width: 4rem !important;
 }
