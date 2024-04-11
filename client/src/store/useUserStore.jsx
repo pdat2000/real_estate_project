@@ -1,6 +1,6 @@
-import { apiGetCurrent, apiGetRoles } from "~/apis/user"
-import { create } from "zustand"
-import { persist, createJSONStorage } from "zustand/middleware"
+import { apiGetCurrent, apiGetRoles } from '~/apis/user'
+import { create } from 'zustand'
+import { persist, createJSONStorage } from 'zustand/middleware'
 
 export const useUserStore = create(
   persist(
@@ -20,14 +20,17 @@ export const useUserStore = create(
         if (response.success) return set(() => ({ roles: response.roles }))
         else return set(() => ({ roles: [] }))
       },
+      logout: () => {
+        return set(() => ({ token: null, current: null }))
+      },
     }),
     {
-      name: "rest06",
+      name: 'rest06',
       storage: createJSONStorage(() => localStorage),
       partialize: (state) =>
         Object.fromEntries(
           Object.entries(state).filter(
-            (el) => el[0] === "token" || el[0] === "current"
+            (el) => el[0] === 'token' || el[0] === 'current'
           )
         ),
     }

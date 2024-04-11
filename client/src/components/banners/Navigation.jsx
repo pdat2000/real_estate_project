@@ -15,7 +15,7 @@ const Navigation = withRouter(({ location }) => {
     <div
       className={twMerge(
         clsx(
-          "bg-transparent fixed z-50 top-[85px] w-full px-[100px] py-[26px] flex justify-between items-center",
+          "bg-transparent fixed z-10 top-[85px] w-full px-[100px] py-[26px] flex justify-between items-center",
           location.pathname !== "/" && "bg-white"
         )
       )}

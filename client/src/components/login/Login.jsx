@@ -51,7 +51,7 @@ const Login = () => {
       })
       .catch((error) => {
         setIsLoading(false)
-        window.confirmOTP = null
+        window.confirmationResult = null
         toast.error('something went wrong')
       })
   }
