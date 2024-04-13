@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -6,42 +6,42 @@ module.exports = {
       id: {
         allowNull: false,
         primaryKey: true,
-        type: Sequelize.UUID,
-        defaultValue: Sequelize.literal("gen_random_uuid()"),
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
       },
       text: {
         type: Sequelize.TEXT,
-        allowNull: false
+        allowNull: false,
       },
       propertyId: {
-        type: Sequelize.UUID, 
+        type: Sequelize.INTEGER,
         references: {
           model: 'Properties',
-          key: 'id'
-        }
+          key: 'id',
+        },
       },
       uid: {
-        type: Sequelize.UUID, 
+        type: Sequelize.INTEGER,
         references: {
           model: 'Users',
-          key: 'id'
-        }
+          key: 'id',
+        },
       },
       parentComment: {
-        type: Sequelize.UUID,
-        allowNull: false
+        type: Sequelize.INTEGER,
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
-    });
+        type: Sequelize.DATE,
+      },
+    })
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Comments');
-  }
-};
+    await queryInterface.dropTable('Comments')
+  },
+}

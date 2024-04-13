@@ -1,13 +1,13 @@
-"use strict"
+'use strict'
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("Properties", {
+    await queryInterface.createTable('Properties', {
       id: {
         allowNull: false,
         primaryKey: true,
-        type: Sequelize.UUID,
-        defaultValue: Sequelize.literal("gen_random_uuid()"),
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
       },
       name: {
         type: Sequelize.STRING,
@@ -18,7 +18,7 @@ module.exports = {
         allowNull: false,
       },
       listingType: {
-        type: Sequelize.ENUM(["SALE", "RENTAL"]),
+        type: Sequelize.ENUM(['SALE', 'RENTAL']),
         allowNull: false,
       },
       price: {
@@ -26,24 +26,24 @@ module.exports = {
         allowNull: false,
       },
       propertyTypeId: {
-        type: Sequelize.UUID,
+        type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: "PropertyTypes",
-          key: "id",
+          model: 'PropertyTypes',
+          key: 'id',
         },
       },
       owner: {
-        type: Sequelize.UUID,
+        type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: "Users",
-          key: "id",
+          model: 'Users',
+          key: 'id',
         },
       },
       status: {
-        type: Sequelize.ENUM(["PENDING", "CANCEL", "APPROVED"]),
-        defaultValue: "PENDING",
+        type: Sequelize.ENUM(['PENDING', 'CANCEL', 'APPROVED']),
+        defaultValue: 'PENDING',
       },
       isAvaliable: {
         type: Sequelize.BOOLEAN,
@@ -58,11 +58,11 @@ module.exports = {
         allowNull: false,
       },
       postedBy: {
-        type: Sequelize.UUID,
+        type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: "Users",
-          key: "id",
+          model: 'Users',
+          key: 'id',
         },
       },
       bedRoom: {
@@ -88,6 +88,6 @@ module.exports = {
     })
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("Properties")
+    await queryInterface.dropTable('Properties')
   },
 }

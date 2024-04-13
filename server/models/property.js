@@ -1,5 +1,5 @@
-"use strict"
-const { Model } = require("sequelize")
+'use strict'
+const { Model } = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
   class Property extends Model {
     /**
@@ -17,35 +17,35 @@ module.exports = (sequelize, DataTypes) => {
       description: DataTypes.TEXT,
       listingType: {
         type: DataTypes.ENUM,
-        values: ["SALE", "RENTAL"],
+        values: ['SALE', 'RENTAL'],
       },
       price: DataTypes.TEXT,
-      propertyTypeId: DataTypes.UUID,
+      propertyTypeId: DataTypes.INTEGER,
       status: {
         type: DataTypes.ENUM,
-        values: ["PENDING", "CANCEL", "APPROVED"],
+        values: ['PENDING', 'CANCEL', 'APPROVED'],
       },
       isAvaliable: DataTypes.BOOLEAN,
       images: {
         type: DataTypes.TEXT,
         get() {
-          const rawValue = this.getDataValue("images")
+          const rawValue = this.getDataValue('images')
           return rawValue ? JSON.parse(rawValue) : []
         },
         set(arrayImages) {
-          this.setDataValue("images", JSON.stringify(arrayImages))
+          this.setDataValue('images', JSON.stringify(arrayImages))
         },
       },
       featuredImage: DataTypes.STRING,
-      postedBy: DataTypes.UUID,
+      postedBy: DataTypes.INTEGER,
       bedRoom: DataTypes.INTEGER,
       bathRoom: DataTypes.INTEGER,
       propertySize: DataTypes.FLOAT,
-      owner: DataTypes.UUID,
+      owner: DataTypes.INTEGER,
     },
     {
       sequelize,
-      modelName: "Property",
+      modelName: 'Property',
     }
   )
   return Property

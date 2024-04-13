@@ -1,5 +1,5 @@
-"use strict"
-const { Model } = require("sequelize")
+'use strict'
+const { Model } = require('sequelize')
 module.exports = (sequelize, DataTypes) => {
   class PropertyFeature extends Model {
     /**
@@ -13,12 +13,12 @@ module.exports = (sequelize, DataTypes) => {
   }
   PropertyFeature.init(
     {
-      propertyId: DataTypes.UUID,
-      featureId: DataTypes.UUID,
+      propertyId: DataTypes.INTEGER,
+      featureId: DataTypes.INTEGER,
     },
     {
       sequelize,
-      modelName: "PropertyFeature",
+      modelName: 'PropertyFeature',
     }
   )
   return PropertyFeature

@@ -1,31 +1,31 @@
-"use strict"
+'use strict'
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("Submissions", {
+    await queryInterface.createTable('Submissions', {
       id: {
         allowNull: false,
         primaryKey: true,
-        type: Sequelize.UUID,
-        defaultValue: Sequelize.literal("gen_random_uuid()"),
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
       },
       propertyId: {
-        type: Sequelize.UUID,
+        type: Sequelize.INTEGER,
         references: {
-          model: "Properties",
-          key: "id",
+          model: 'Properties',
+          key: 'id',
         },
       },
       uid: {
-        type: Sequelize.UUID,
+        type: Sequelize.INTEGER,
         references: {
-          model: "Users",
-          key: "id",
+          model: 'Users',
+          key: 'id',
         },
       },
       message: {
         type: Sequelize.TEXT,
-        allowNull: false
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,
@@ -38,6 +38,6 @@ module.exports = {
     })
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("Submissions")
+    await queryInterface.dropTable('Submissions')
   },
 }

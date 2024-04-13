@@ -1,19 +1,19 @@
-"use strict"
+'use strict'
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("UserMedias", {
+    await queryInterface.createTable('UserMedias', {
       id: {
         allowNull: false,
         primaryKey: true,
-        type: Sequelize.UUID,
-        defaultValue: Sequelize.literal("gen_random_uuid()"),
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
       },
       uid: {
-        type: Sequelize.UUID,
+        type: Sequelize.INTEGER,
         references: {
-          model: "Users",
-          key: "id",
+          model: 'Users',
+          key: 'id',
         },
       },
       provider: {
@@ -39,6 +39,6 @@ module.exports = {
     })
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("UserMedias")
+    await queryInterface.dropTable('UserMedias')
   },
 }

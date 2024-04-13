@@ -1,2 +1,5 @@
 npx sequelize-cli model:generate --name User --attributes firstName:string,lastName:string,email:string
 npx sequelize-cli db:migrate
+npx sequelize-cli seed:generate --name role
+npx sequelize-cli db:seed --seed 20240413131921-role.js
+npx sequelize-cli db:seed:undo --seed 20240413131921-role.js
