@@ -61,7 +61,7 @@ const Topheader = withRouter(({ location }) => {
           >
             <div className="flex flex-col gap-2">
               <span>{current?.name}</span>
-              <span>ID: {current?.id.slice(0, 6)}</span>
+              <span>ID: {current?.id}</span>
             </div>
             <img
               src={current?.avatar || '/user.svg'}

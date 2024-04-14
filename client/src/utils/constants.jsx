@@ -34,7 +34,7 @@ export const adminSibar = [
   {
     id: 12,
     name: 'Dashboard',
-    path: `/${path.ADMIN_LAYOUT}/${path.DASHBOARD}`,
+    path: `/${path.ADMIN_LAYOUT}/${path.ADMIN_DASHBOARD}`,
     icon: <FaHouseChimney />,
     type: 'SINGLE',
   },
