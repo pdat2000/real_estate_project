@@ -1,3 +1,5 @@
+import { Search } from '~/components'
+
 const Home = () => {
   return (
     <div className="bg-white w-full">
@@ -20,6 +22,7 @@ const Home = () => {
           </span>
         </div>
       </div>
+      <Search />
       <div className="w-main m-auto">content</div>
     </div>
   )
