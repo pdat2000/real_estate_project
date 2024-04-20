@@ -1,9 +1,19 @@
+import clsx from 'clsx'
 import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { twMerge } from 'tailwind-merge'
 import { apiGetProperties } from '~/apis/properties'
-import { Breadcrumb, PropertyCard } from '~/components'
+import { Breadcrumb, PropertyCard, InputSelect, Button } from '~/components'
 
 const Properties = () => {
-  const [properties, setProperties] = useState()
+  const {
+    register,
+    formState: { errors },
+    // watch,
+  } = useForm()
+  // const sort = watch('sort')
+  const [properties, setProperties] = useState({})
+  const [mode, setMode] = useState('ALL')
   useEffect(() => {
     const fetchProperties = async () => {
       const response = await apiGetProperties({
@@ -30,7 +40,71 @@ const Properties = () => {
         </div>
       </div>
       <div className="w-main mx-auto my-20">
-        <div>sort by</div>
+        <div className="flex items-center justify-between">
+          <div className="my-4">
+            <InputSelect
+              id="sort"
+              register={register}
+              errors={errors}
+              containerClassname="flex gap-2 flex-row justify-center items-center"
+              label="Sort"
+              placeholder="Select"
+              options={[
+                {
+                  label: 'Lastest',
+                  code: '-createdAt',
+                },
+                {
+                  label: 'Oldest',
+                  code: 'createdAt',
+                },
+                {
+                  label: 'A - Z',
+                  code: 'name',
+                },
+                {
+                  label: 'Z - A',
+                  code: '-name',
+                },
+              ]}
+            />
+          </div>
+          <div className="flex items-center gap-4">
+            <Button
+              className={twMerge(
+                clsx(
+                  'whitespace-nowrap bg-transparent border-none text-black font-medium',
+                  mode === 'ALL' && 'font-bold'
+                )
+              )}
+              handleOnClick={() => setMode('ALL')}
+            >
+              All properties
+            </Button>
+            <Button
+              className={twMerge(
+                clsx(
+                  'whitespace-nowrap bg-transparent border-none text-black font-medium',
+                  mode === 'RENT' && 'font-bold'
+                )
+              )}
+              handleOnClick={() => setMode('RENT')}
+            >
+              For Rent
+            </Button>
+            <Button
+              className={twMerge(
+                clsx(
+                  'whitespace-nowrap bg-transparent border-none text-black font-medium',
+                  mode === 'SALE' && 'font-bold'
+                )
+              )}
+              handleOnClick={() => setMode('SALE')}
+            >
+              For Sale
+            </Button>
+          </div>
+        </div>
         <div className="w-full grid grid-cols-3 gap-4">
           {properties?.rows?.map((el) => (
             <PropertyCard key={el.id} properties={el} />
