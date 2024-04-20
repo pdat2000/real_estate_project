@@ -110,7 +110,7 @@ module.exports = {
       updatedAt: new Date(),
     },
   ],
-  properties: Array.from([...Array(10).keys()]).map(() => ({
+  properties: Array.from([...Array(50).keys()]).map(() => ({
     name: faker.lorem.sentences({ max: 2, min: 1 }).replace('.', ' '),
     description: faker.lorem.sentences({ min: 5, max: 10 }),
     listingType: faker.helpers.arrayElement(['SALE', 'RENTAL']),

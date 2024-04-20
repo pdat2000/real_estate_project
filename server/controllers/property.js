@@ -1,16 +1,84 @@
-const asyncHandler = require("express-async-handler")
-const db = require("../models")
+const asyncHandler = require('express-async-handler')
+const db = require('../models')
+const redis = require('../config/redis.config')
 
-const getCurrent = asyncHandler(async (req, res) => {
-  const response = await db.User.findByPk(uid, {
-    attributes: { exclude: ["password"] },
-  })
+module.exports = {
+  getCurrent: asyncHandler(async (req, res) => {
+    const response = await db.User.findByPk(uid, {
+      attributes: { exclude: ['password'] },
+    })
 
-  return res.json({
-    success: Boolean(response),
-    mes: response ? "Got" : "Can not get user",
-    currentUser: response,
-  })
-})
+    return res.json({
+      success: Boolean(response),
+      mes: response ? 'Got' : 'Can not get user',
+      currentUser: response,
+    })
+  }),
 
-module.exports = { getCurrent }
+  getProperties: asyncHandler(async (req, res) => {
+    const { limit, page, fields, name, sort, ...query } = req.query
+    const options = {}
+    if (fields) {
+      const attributes = fields.split(',')
+      const isExclude = attributes.some((el) => el.startsWith('-'))
+      if (isExclude) {
+        options.attributes = {
+          exclude: attributes.map((el) => el.replace('-', '')),
+        }
+      } else options.attributes = attributes
+    }
+
+    // if (name)
+    //   query.name = Sequelize.where(
+    //     Sequelize.fn('LOWER', Sequelize.col('name')),
+    //     'LIKE',
+    //     `%${name.toLocaleLowerCase()}%`
+    //   )
+
+    if (sort) {
+      const order = sort
+        .split(',')
+        .map((el) =>
+          el.startsWith('-')
+            ? [el.replace('-', ''), 'DESC']
+            : [el.replace('-', ''), 'ASC']
+        )
+      options.order = order
+    }
+
+    if (!limit) {
+      const alreadyGetAll = await redis.get('get-properties')
+      if (alreadyGetAll)
+        return res.json({
+          success: true,
+          mes: 'Got',
+          properties: JSON.parse(alreadyGetAll),
+        })
+
+      const response = await db.Property.findAll({
+        where: query,
+        ...options,
+      })
+      redis.set('get-properties', JSON.stringify(response))
+      return res.json({
+        success: response.length > 0,
+        mes: response.length > 0 ? 'Got' : 'Cannot get properties',
+        properties: response,
+      })
+    }
+
+    const prevPage = page - 1 <= 0 ? 1 : page
+    const offset = (prevPage - 1) * limit
+    if (offset) options.offset = offset
+    options.limit = +limit
+    const response = await db.Property.findAndCountAll({
+      where: query,
+      ...options,
+    })
+    return res.json({
+      success: response.length > 0,
+      mes: response.length > 0 ? 'Got' : 'Cannot get properties',
+      properties: response,
+    })
+  }),
+}

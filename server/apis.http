@@ -26,7 +26,6 @@ GET http://localhost:5000/api/user/current
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJjNTYyMDYwOC00ODE4LTQ0MTktOWMxZi1jMGEzMGM3MWZjYWQiLCJyb2xlIjoiVVNFUiIsImlhdCI6MTcxMTQ3NDcwNSwiZXhwIjoxNzEyMDc5NTA1fQ.Rf0O-A0HSCNKH9vbVtrUTfrdwNf7BF5sscayju4c6ro
 
-### inser Role
-
-POST http://localhost:5000/api/insert/roles
-Content-Type: application/json
+### get properties
+GET http://localhost:5000/api/properties
+Content-Type: application/json 

@@ -15,13 +15,14 @@ const Topheader = withRouter(({ location }) => {
   const [isShowOptions, setIsShowOptions] = useState(false)
   useEffect(() => {
     const handleOnClick = (e) => {
-      if (optionBox.current.contains(e.target)) setIsShowOptions(true)
+      if (optionBox.current && optionBox.current.contains(e.target))
+        setIsShowOptions(true)
       else setIsShowOptions(false)
     }
-    window.addEventListener('click', handleOnClick)
+    document.addEventListener('click', handleOnClick)
 
     return () => {
-      window, addEventListener('click', handleOnClick)
+      document, addEventListener('click', handleOnClick)
     }
   }, [])
 
