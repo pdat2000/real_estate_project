@@ -1,6 +1,7 @@
 import clsx from 'clsx'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useSearchParams } from 'react-router-dom'
 import { twMerge } from 'tailwind-merge'
 import { apiGetProperties } from '~/apis/properties'
 import {
@@ -20,15 +21,18 @@ const Properties = () => {
   // const sort = watch('sort')
   const [properties, setProperties] = useState({})
   const [mode, setMode] = useState('ALL')
+  const [searchParams] = useSearchParams()
   useEffect(() => {
-    const fetchProperties = async () => {
+    const params = Object.fromEntries([...searchParams])
+    const fetchProperties = async (params) => {
       const response = await apiGetProperties({
         limit: 9,
+        ...params,
       })
-      if (!response.success) setProperties(response.properties)
+      if (response.success) setProperties(response.properties)
     }
-    fetchProperties()
-  }, [])
+    fetchProperties(params)
+  }, [searchParams])
 
   return (
     <div className="w-full">
@@ -117,7 +121,11 @@ const Properties = () => {
           ))}
         </div>
         <div className="flex items-center justify-center my-4">
-          <Pagination />
+          <Pagination
+            total={properties?.count}
+            limit={properties?.limit}
+            page={properties?.page}
+          />
         </div>
       </div>
     </div>

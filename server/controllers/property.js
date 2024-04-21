@@ -87,10 +87,13 @@ module.exports = {
         },
       ],
     })
+
     return res.json({
-      success: response.length > 0,
+      success: response.rows.length > 0,
       mes: response.length > 0 ? 'Got' : 'Cannot get properties',
-      properties: response,
+      properties: response
+        ? { ...response, limit: +limit, page: page ? page : 1 }
+        : null,
     })
   }),
 }
