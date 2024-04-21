@@ -3,7 +3,13 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { twMerge } from 'tailwind-merge'
 import { apiGetProperties } from '~/apis/properties'
-import { Breadcrumb, PropertyCard, InputSelect, Button } from '~/components'
+import {
+  Breadcrumb,
+  PropertyCard,
+  InputSelect,
+  Button,
+  Pagination,
+} from '~/components'
 
 const Properties = () => {
   const {
@@ -109,6 +115,9 @@ const Properties = () => {
           {properties?.rows?.map((el) => (
             <PropertyCard key={el.id} properties={el} />
           ))}
+        </div>
+        <div className="flex items-center justify-center my-4">
+          <Pagination />
         </div>
       </div>
     </div>
