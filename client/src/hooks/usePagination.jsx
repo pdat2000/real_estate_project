@@ -19,13 +19,13 @@ const usePagination = ({
     const isShowDotsInLeft = currentPage - sibling > 3
     const isShowDotsInRight = currentPage + sibling < pageNumber - 2
 
-    if (isShowDotsInLeft && isShowDotsInRight) {
-      const rightStart = pageNumber - 2 - sibling * 2
+    if (isShowDotsInLeft && !isShowDotsInRight) {
+      const rightStart = pageNumber - 2 - sibling
       const rightArray = renderRangeNumber(rightStart, pageNumber)
       return [1, <BiDotsHorizontal />, ...rightArray]
     }
     if (!isShowDotsInLeft && isShowDotsInRight) {
-      const leftArray = renderRangeNumber(1, 3 + sibling * 2)
+      const leftArray = renderRangeNumber(1, 4 - sibling)
       return [...leftArray, <BiDotsHorizontal />, pageNumber]
     }
 
