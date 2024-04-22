@@ -92,7 +92,7 @@ module.exports = {
       success: response.rows.length > 0,
       mes: response.length > 0 ? 'Got' : 'Cannot get properties',
       properties: response
-        ? { ...response, limit: +limit, page: page ? page : 1 }
+        ? { ...response, limit: +limit, page: +page ? +page : 1 }
         : null,
     })
   }),
