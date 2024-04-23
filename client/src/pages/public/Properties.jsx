@@ -2,6 +2,7 @@ import clsx from 'clsx'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useSearchParams } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import { twMerge } from 'tailwind-merge'
 import { apiGetProperties } from '~/apis/properties'
 import {
@@ -30,6 +31,7 @@ const Properties = () => {
         ...params,
       })
       if (response.success) setProperties(response.properties)
+      else toast.error(response.mes)
     }
     fetchProperties(params)
   }, [searchParams])
