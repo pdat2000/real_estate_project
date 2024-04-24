@@ -16,7 +16,7 @@ module.exports = {
   }),
 
   getProperties: asyncHandler(async (req, res) => {
-    const { limit, page, fields, name, sort, ...query } = req.query
+    const { limit, page, fields, name, sort, address, ...query } = req.query
     const options = {}
     if (fields) {
       const attributes = fields.split(',')
@@ -28,12 +28,12 @@ module.exports = {
       } else options.attributes = attributes
     }
 
-    // if (name)
-    //   query.name = Sequelize.where(
-    //     Sequelize.fn('LOWER', Sequelize.col('name')),
-    //     'LIKE',
-    //     `%${name.toLocaleLowerCase()}%`
-    //   )
+    if (address)
+      query.address = Sequelize.where(
+        Sequelize.fn('LOWER', Sequelize.col('address')),
+        'LIKE',
+        `%${address.toLocaleLowerCase()}%`
+      )
 
     if (sort) {
       const order = sort

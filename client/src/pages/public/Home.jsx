@@ -23,7 +23,7 @@ const Home = () => {
         </div>
       </div>
       <Search />
-      <div className="w-main m-auto">content</div>
+      <div className="w-main m-auto h-[500px]">content</div>
     </div>
   )
 }
