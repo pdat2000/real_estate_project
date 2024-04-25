@@ -19,15 +19,17 @@ const getIpAddress = () => {
   return Object.values(results)[0]
 }
 
-module.exports = {
-  gerenateKeyRedis: (filter) => {
-    const filterStringKey = JSON.stringify(filter)
-      .replace(/\W/g, '')
-      .split('')
-      .sort((a, b) => a.localeCompare(b))
-      .join('')
-    const IPAddress = getIpAddress()
+const gerenateKeyRedis = (filter) => {
+  const filterStringKey = JSON.stringify(filter)
+    .replace(/\W/g, '')
+    .split('')
+    .sort((a, b) => a.localeCompare(b))
+    .join('')
+  const IPAddress = getIpAddress()
 
-    return filterStringKey + IPAddress
-  },
+  return filterStringKey + IPAddress
+}
+
+module.exports = {
+  gerenateKeyRedis,
 }

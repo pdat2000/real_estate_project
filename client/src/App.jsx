@@ -30,7 +30,7 @@ function App() {
   useEffect(() => {
     getCurrent()
     getRoles()
-    getPropertyTypes({ fields: 'id,name' })
+    getPropertyTypes({ fields: 'id,name,images' })
   }, [token])
 
   return (

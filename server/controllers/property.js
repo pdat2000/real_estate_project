@@ -30,7 +30,7 @@ module.exports = {
 
     if (address)
       query.address = Sequelize.where(
-        Sequelize.fn('LOWER', Sequelize.col('address')),
+        Sequelize.fn('LOWER', Sequelize.col('Property.address')),
         'LIKE',
         `%${address.toLocaleLowerCase()}%`
       )
