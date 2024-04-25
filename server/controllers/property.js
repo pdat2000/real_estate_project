@@ -1,6 +1,7 @@
 const asyncHandler = require('express-async-handler')
 const db = require('../models')
 const redis = require('../config/redis.config')
+const { Sequelize } = require('sequelize')
 
 module.exports = {
   getCurrent: asyncHandler(async (req, res) => {
