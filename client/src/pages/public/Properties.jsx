@@ -11,20 +11,27 @@ import {
   InputSelect,
   Button,
   Pagination,
+  Search,
 } from '~/components'
+import { CiMenuBurger } from 'react-icons/ci'
+import { useAppStore } from '~/store/useAppStore'
+import withRouter from '~/hocs/withRouter'
 
-const Properties = () => {
+const Properties = ({ navigate, location }) => {
   const {
     register,
     formState: { errors },
-    // watch,
+    watch,
   } = useForm()
-  // const sort = watch('sort')
+  const sort = watch('sort')
   const [properties, setProperties] = useState({})
   const [mode, setMode] = useState('ALL')
   const [searchParams] = useSearchParams()
+  const { setModal } = useAppStore()
   useEffect(() => {
     const params = Object.fromEntries([...searchParams])
+
+    if (params.price) params.price = searchParams.getAll('price')
     const fetchProperties = async (params) => {
       const response = await apiGetProperties({
         limit: 9,
@@ -33,8 +40,9 @@ const Properties = () => {
       if (response.success) setProperties(response.properties)
       else toast.error(response.mes)
     }
+    if (sort) params.sort = sort
     fetchProperties(params)
-  }, [searchParams])
+  }, [searchParams, sort])
 
   return (
     <div className="w-full">
@@ -53,33 +61,47 @@ const Properties = () => {
       </div>
       <div className="w-main mx-auto my-20">
         <div className="flex items-center justify-between">
-          <div className="my-4">
-            <InputSelect
-              id="sort"
-              register={register}
-              errors={errors}
-              containerClassname="flex gap-2 flex-row justify-center items-center"
-              label="Sort"
-              placeholder="Select"
-              options={[
-                {
-                  label: 'Lastest',
-                  code: '-createdAt',
-                },
-                {
-                  label: 'Oldest',
-                  code: 'createdAt',
-                },
-                {
-                  label: 'A - Z',
-                  code: 'name',
-                },
-                {
-                  label: 'Z - A',
-                  code: '-name',
-                },
-              ]}
-            />
+          <div className="flex items-center gap-4">
+            <span
+              className="cursor-pointer"
+              onClick={() => setModal(true, <Search direction="vertical" />)}
+            >
+              <CiMenuBurger size={25} />
+            </span>
+            <div className="my-4">
+              <InputSelect
+                id="sort"
+                register={register}
+                errors={errors}
+                containerClassname="flex gap-2 flex-row justify-center items-center"
+                label="Sort"
+                placeholder="Select"
+                options={[
+                  {
+                    label: 'Lastest',
+                    code: '-createdAt',
+                  },
+                  {
+                    label: 'Oldest',
+                    code: 'createdAt',
+                  },
+                  {
+                    label: 'A - Z',
+                    code: 'name',
+                  },
+                  {
+                    label: 'Z - A',
+                    code: '-name',
+                  },
+                ]}
+              />
+            </div>
+            <Button
+              className="whitespace-nowrap"
+              handleOnClick={() => navigate(location.pathname)}
+            >
+              Reset Filter
+            </Button>
           </div>
           <div className="flex items-center gap-4">
             <Button
@@ -134,4 +156,4 @@ const Properties = () => {
   )
 }
 
-export default Properties
+export default withRouter(Properties)

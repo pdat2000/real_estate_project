@@ -1,7 +1,7 @@
 const asyncHandler = require('express-async-handler')
 const db = require('../models')
 const redis = require('../config/redis.config')
-const { Sequelize } = require('sequelize')
+const { Sequelize, Op } = require('sequelize')
 
 module.exports = {
   getCurrent: asyncHandler(async (req, res) => {
@@ -17,8 +17,10 @@ module.exports = {
   }),
 
   getProperties: asyncHandler(async (req, res) => {
-    const { limit, page, fields, name, sort, address, ...query } = req.query
+    const { limit, page, fields, name, sort, address, price, ...query } =
+      req.query
     const options = {}
+
     if (fields) {
       const attributes = fields.split(',')
       const isExclude = attributes.some((el) => el.startsWith('-'))
@@ -29,12 +31,13 @@ module.exports = {
       } else options.attributes = attributes
     }
 
-    if (address)
+    if (address) {
       query.address = Sequelize.where(
         Sequelize.fn('LOWER', Sequelize.col('Property.address')),
         'LIKE',
         `%${address.toLocaleLowerCase()}%`
       )
+    }
 
     if (sort) {
       const order = sort
@@ -66,6 +69,16 @@ module.exports = {
         mes: response.length > 0 ? 'Got' : 'Cannot get properties',
         properties: response,
       })
+    }
+
+    if (price) {
+      const isBetweenFilter = price?.every((el) => !isNaN(el))
+      if (isBetweenFilter) query.price = { [Op.between]: price }
+      else {
+        const number = price?.find((el) => !isNaN(el))
+        const operator = price?.find((el) => isNaN(el))
+        query.price = { [Op[operator]]: number }
+      }
     }
 
     const prevPage = page - 1 <= 0 ? 1 : page
