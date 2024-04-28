@@ -59,7 +59,7 @@ const Login = () => {
     if (variant === 'REGISTER') {
       if (data?.roleCode !== 'ROL7') {
         handleSendOTP(data.phone)
-      }
+      } else handleRegister(data)
     }
     if (variant === 'LOGIN') {
       setIsLoading(true)

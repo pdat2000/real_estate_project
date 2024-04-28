@@ -1,6 +1,7 @@
 import path from './path'
 import { FaHouseChimney } from 'react-icons/fa6'
 import { ImMenu } from 'react-icons/im'
+import { BsPersonCircle } from 'react-icons/bs'
 
 export const navigations = [
   {
@@ -55,6 +56,16 @@ export const adminSibar = [
         name: 'Manage',
       },
     ],
+  },
+]
+
+export const userSibar = [
+  {
+    id: 12,
+    name: 'Personal',
+    path: `/${path.USER_LAYOUT}/${path.PERSONAL}`,
+    icon: <BsPersonCircle />,
+    type: 'SINGLE',
   },
 ]
 
