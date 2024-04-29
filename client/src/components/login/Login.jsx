@@ -73,7 +73,9 @@ const Login = () => {
     }
   }
   const handleRegister = async (data) => {
-    const response = await apiRegister(data)
+    const { roleCode, ...payload } = data
+    if (!roleCode === 'ROL7') data.roleCode = roleCode
+    const response = await apiRegister(payload)
     if (response.success) {
       Swal.fire({
         icon: 'success',

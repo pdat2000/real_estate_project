@@ -1,10 +1,13 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useUserStore } from '~/store/useUserStore'
-import { InputForm, InputFile } from '~/components'
+import { InputForm, InputFile, Button } from '~/components'
+import { apiUpdateProfile } from '~/apis/user'
+import { toast } from 'react-toastify'
 
 const Personal = () => {
-  const { current } = useUserStore()
+  const { current, getCurrent } = useUserStore()
+  const [isChangeAvatar, setIsChangeAvatar] = useState(false)
   const {
     register,
     formState: { errors },
@@ -26,15 +29,26 @@ const Personal = () => {
 
   const getImages = useCallback(
     (images) => {
-      if (images && images.length > 0) clearErrors('images')
+      if (images && images.length > 0) clearErrors('avatar')
       setValue(
-        'images',
+        'avatar',
         images?.map((el) => el.path)
       )
       if (images && images.length === 0) setResetImage(false)
     },
     [clearErrors, setValue]
   )
+  const onSubmit = async (data) => {
+    const { avatar, ...payload } = data
+
+    if (Array.isArray(avatar)) payload.avatar = avatar
+    const response = await apiUpdateProfile(payload)
+    if (response.success) {
+      getCurrent()
+      setIsChangeAvatar(false)
+      toast.success(response.mes)
+    } else toast.error(response.mes)
+  }
 
   return (
     <div className="h-full">
@@ -61,7 +75,9 @@ const Personal = () => {
           label="Phone number"
           required
           placeholder="Required phone"
-          readOnly={!current.userRole?.some((el) => el.roleCode === 'ROL7')}
+          readOnly={
+            current?.userRole?.length === 1 && current?.userRole[0] === 'ROL7'
+          }
         />
         <InputForm
           id="email"
@@ -81,15 +97,36 @@ const Personal = () => {
           required
           placeholder="Required address"
         />
-        <InputFile
-          id="avatar"
-          setValue={setValue}
-          label="Avatar"
-          validate={{ required: 'This field cannot empty.' }}
-          getImages={getImages}
-          errors={errors}
-          resetImage={resetImage}
-        />
+        <div className="flex flex-col gap-2">
+          <span className="font-medium text-main-700">
+            Avatar
+            <span
+              className="text-xs cursor-pointer hover:underline text-orange-600 ml-2"
+              onClick={() => setIsChangeAvatar((prev) => !prev)}
+            >
+              {isChangeAvatar ? 'Unchange ✋' : 'Change ✎'}
+            </span>
+          </span>
+          {isChangeAvatar ? (
+            <InputFile
+              id="avatar"
+              setValue={setValue}
+              validate={{ required: 'This field cannot empty.' }}
+              getImages={getImages}
+              errors={errors}
+              resetImage={resetImage}
+            />
+          ) : (
+            <img
+              src={current?.avatar || '/user2.svg'}
+              alt="avatar"
+              className="w-28 h-28 object-cover rounded-full"
+            />
+          )}
+        </div>
+        <Button className="mx-auto" handleOnClick={handleSubmit(onSubmit)}>
+          Update
+        </Button>
       </form>
     </div>
   )

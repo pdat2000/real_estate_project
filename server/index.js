@@ -1,9 +1,9 @@
-require("dotenv").config()
-const express = require("express")
-const cors = require("cors")
-const dbconn = require("./config/dbConnect")
-const initRoutes = require("./routes")
-require("./config/redis.config")
+require('dotenv').config()
+const express = require('express')
+const cors = require('cors')
+const dbconn = require('./config/dbConnect')
+const initRoutes = require('./routes')
+require('./config/redis.config')
 
 const app = express()
 
@@ -22,6 +22,5 @@ dbconn()
 
 initRoutes(app)
 
-
 const PORT = process.env.PORT || 8000
-app.listen(PORT, () => console.log("server ready " + PORT))
+app.listen(PORT, () => console.log('server ready ' + PORT))
