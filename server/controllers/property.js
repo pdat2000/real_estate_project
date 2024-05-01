@@ -4,17 +4,17 @@ const redis = require('../config/redis.config')
 const { Sequelize, Op } = require('sequelize')
 
 module.exports = {
-  getCurrent: asyncHandler(async (req, res) => {
-    const response = await db.User.findByPk(uid, {
-      attributes: { exclude: ['password'] },
-    })
+  // getCurrent: asyncHandler(async (req, res) => {
+  //   const response = await db.User.findByPk(uid, {
+  //     attributes: { exclude: ['password'] },
+  //   })
 
-    return res.json({
-      success: Boolean(response),
-      mes: response ? 'Got' : 'Can not get user',
-      currentUser: response,
-    })
-  }),
+  //   return res.json({
+  //     success: Boolean(response),
+  //     mes: response ? 'Got' : 'Can not get user',
+  //     currentUser: response,
+  //   })
+  // }),
 
   getProperties: asyncHandler(async (req, res) => {
     const { limit, page, fields, name, sort, address, price, ...query } =
@@ -108,6 +108,18 @@ module.exports = {
       properties: response
         ? { ...response, limit: +limit, page: +page ? +page : 1 }
         : null,
+    })
+  }),
+
+  getOneById: asyncHandler(async (req, res) => {
+    const { propertyId } = req.params
+
+    const response = await db.Property.findByPk(propertyId)
+
+    return res.json({
+      success: !!response,
+      mes: response ? 'Got' : 'Can not get property details',
+      data: response,
     })
   }),
 }

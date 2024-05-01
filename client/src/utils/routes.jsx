@@ -6,6 +6,7 @@ import {
   OurAgents,
   Properties,
   PublicLayout,
+  PropertyDetail,
 } from '~/pages/public'
 import {
   CreatePropertyType,
@@ -39,6 +40,10 @@ const routes = [
           {
             path: path.PROPERTIES,
             element: <Properties />,
+          },
+          {
+            path: path.PROPERTY_DETAIL_ID,
+            element: <PropertyDetail />,
           },
         ],
       },

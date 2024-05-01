@@ -3,6 +3,7 @@ import { TfiMoney } from 'react-icons/tfi'
 import { BiBed } from 'react-icons/bi'
 import { FaBath, FaShareAlt } from 'react-icons/fa'
 import { AiOutlineHeart } from 'react-icons/ai'
+import { Link } from 'react-router-dom'
 
 const PropertyCard = ({ properties }) => {
   return (
@@ -13,9 +14,13 @@ const PropertyCard = ({ properties }) => {
         className="w-full h-[240px] rounded-t-md object-cover"
       />
       <div className="p-4 flex flex-col gap-2">
-        <h1 className="text-2xl font-medium line-clamp-2 text-gray-700">
+        <Link
+          to={`${properties.id}`}
+          state={{ name: properties.name }}
+          className="text-2xl font-medium line-clamp-2 text-gray-700 hover:underline"
+        >
           {properties?.name}
-        </h1>
+        </Link>
         <span className="text-lg font-bold text-main-500 flex gap-1 items-center">
           <TfiMoney size={18} />
           {`${formatMoney(properties?.price)}`}
