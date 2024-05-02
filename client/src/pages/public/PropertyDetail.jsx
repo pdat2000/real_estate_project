@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { Breadcrumb, Images, BoxInfo } from '~/components'
+import { Breadcrumb, Images, BoxInfo, Map } from '~/components'
 import { apiGetDetailProperty } from '~/apis/properties'
 import { CiLocationOn } from 'react-icons/ci'
 import DOMPurify from 'dompurify'
@@ -102,6 +102,9 @@ const PropertyDetail = () => {
                   />
                 </tbody>
               </table>
+            </div>
+            <div className="my-4">
+              <Map address={propertyDetail?.address} />
             </div>
           </div>
           <div className="col-span-3 gap-3 flex flex-col">
