@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { Breadcrumb } from '~/components'
+import { Breadcrumb, Images } from '~/components'
 import { apiGetDetailProperty } from '~/apis/properties'
 
 const PropertyDetail = () => {
@@ -30,7 +30,10 @@ const PropertyDetail = () => {
             <Breadcrumb />
           </div>
         </div>
-      </div>{' '}
+      </div>
+      <div className="w-main mx-auto my-8">
+        {propertyDetail?.images && <Images images={propertyDetail.images} />}
+      </div>
     </div>
   )
 }

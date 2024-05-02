@@ -114,7 +114,25 @@ module.exports = {
   getOneById: asyncHandler(async (req, res) => {
     const { propertyId } = req.params
 
-    const response = await db.Property.findByPk(propertyId)
+    const response = await db.Property.findByPk(propertyId, {
+      include: [
+        {
+          model: db.PropertyType,
+          as: 'rPropertyType',
+          attributes: ['name', 'images'],
+        },
+        {
+          model: db.User,
+          as: 'rPostedBy',
+          attributes: ['name', 'phone', 'avatar'],
+        },
+        {
+          model: db.User,
+          as: 'rOwner',
+          attributes: ['name', 'phone', 'avatar'],
+        },
+      ],
+    })
 
     return res.json({
       success: !!response,

@@ -3,8 +3,8 @@ import { NavLink } from 'react-router-dom'
 import { twMerge } from 'tailwind-merge'
 import useBreadcrumbs from 'use-react-router-breadcrumbs'
 
-const DynamicBreadcrumb = ({ location }) => {
-  return <span>{location.state?.name}</span>
+const DynamicBreadcrumb = ({ match }) => {
+  return <span>{match.params.id}</span>
 }
 const breadcrumbRoutes = [
   { path: '/', breadcrumb: 'Home' },
@@ -27,7 +27,7 @@ const Breadcrumb = () => {
             className={twMerge(
               clsx(
                 'hover:underline',
-                Object.keys(match.params).length > 0 && 'w-[200px] line-clamp-1'
+                Object.keys(match.params).length > 0 && 'line-clamp-1'
               )
             )}
           >
