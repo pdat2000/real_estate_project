@@ -21,7 +21,7 @@ const BoxInfo = ({ data, containerClassName }) => {
         className="px-6 py-2 bg-main-700 text-white rounded-md font-semibold"
         href={`tel: ${data?.phone}`}
       >
-        {data.phone}
+        {data?.phone}
       </a>
     </div>
   )
