@@ -22,7 +22,7 @@ export default {
         "overlay-30": "rgba(0,0,0,0.3)",
         "overlay-50": "rgba(0,0,0,0.5)",
       },
-      color: {
+      colors: {
         "main-50": "#EDEFF6",
         "main-100": "#DBDFEC",
         "main-200": "#B7BFD9",
